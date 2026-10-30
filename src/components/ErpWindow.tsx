@@ -159,7 +159,7 @@ export default function ErpWindow() {
       </div>
 
       <div aria-live="polite" className={`pointer-events-none absolute bottom-6 start-1/2 -translate-x-1/2 rounded border border-erp-line bg-erp-surface px-3 py-2 text-[12px] text-erp-ink shadow-lg transition-opacity ${toast ? "opacity-100" : "opacity-0"}`}>
-        {t({ ar: "دي نسخة عرض — الإدخال الحقيقي في الديمو العملي.", en: "This is a preview — real data entry happens in the live demo." })}
+        {t({ ar: "دي نسخة عرض — جرّب الإدخال الحقيقي في العرض الحي المجاني.", en: "This is a preview — try real data entry in the free live demo." })}
       </div>
     </div>
   );

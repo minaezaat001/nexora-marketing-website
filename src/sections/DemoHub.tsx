@@ -31,8 +31,8 @@ function DemoForm({ compact = false }: { compact?: boolean }) {
   const modL = f.mods.map((m) => t(modules.find((x) => x.id === m)!.name));
 
   const message = lang === "ar"
-    ? `طلب ديمو — NEXORA ERP\n• النشاط: ${segL ? t(segL) : "-"}\n• حجم الفريق: ${f.size ?? "-"}\n• الموديولات: ${modL.join("، ") || "-"}\n• الاسم: ${f.name}\n• الشركة: ${f.company || "-"}\n• الموبايل: ${f.phone}\n• المدينة: ${f.city || "-"}`
-    : `Demo request — NEXORA ERP\n• Business: ${segL ? t(segL) : "-"}\n• Team size: ${f.size ?? "-"}\n• Modules: ${modL.join(", ") || "-"}\n• Name: ${f.name}\n• Company: ${f.company || "-"}\n• Phone: ${f.phone}\n• City: ${f.city || "-"}`;
+    ? `طلب عرض حي — NEXORA ERP\n• النشاط: ${segL ? t(segL) : "-"}\n• حجم الفريق: ${f.size ?? "-"}\n• الإدارات: ${modL.join("، ") || "-"}\n• الاسم: ${f.name}\n• الشركة: ${f.company || "-"}\n• الموبايل: ${f.phone}\n• المدينة: ${f.city || "-"}`
+    : `Demo request — NEXORA ERP\n• Business: ${segL ? t(segL) : "-"}\n• Team size: ${f.size ?? "-"}\n• Departments: ${modL.join(", ") || "-"}\n• Name: ${f.name}\n• Company: ${f.company || "-"}\n• Phone: ${f.phone}\n• City: ${f.city || "-"}`;
 
   const stepLabels: L[] = [{ ar: "النشاط", en: "Business" }, { ar: "الاحتياج", en: "Needs" }, { ar: "التواصل", en: "Contact" }];
   const input = "h-11 w-full rounded border border-ruleStrong bg-sheet px-3 text-[15px] text-ink placeholder:text-muted focus:border-royal focus:outline-none";
@@ -76,7 +76,7 @@ function DemoForm({ compact = false }: { compact?: boolean }) {
                 </div>
               </fieldset>
               <fieldset>
-                <legend className="mb-2 text-[15px] font-medium text-ink">{t({ ar: "الدوائر اللي تهمك", en: "Areas you care about" })}</legend>
+                <legend className="mb-2 text-[15px] font-medium text-ink">{t({ ar: "الإدارات اللي تهمك", en: "Departments you care about" })}</legend>
                 <div className="flex flex-wrap gap-2">
                   {modules.map((m) => {
                     const on = f.mods.includes(m.id);
@@ -115,11 +115,11 @@ function DemoForm({ compact = false }: { compact?: boolean }) {
           <div className="ms-auto flex flex-wrap gap-2">
             <a aria-disabled={!can[2]} href={can[2] ? `mailto:${site.email}?subject=${encodeURIComponent("NEXORA ERP — Demo")}&body=${encodeURIComponent(message)}` : undefined}
               className={`inline-flex h-11 items-center rounded border border-ruleStrong bg-sheet px-4 text-[14px] text-ink transition-colors hover:border-royal ${can[2] ? "" : "pointer-events-none opacity-40"}`}>
-              {t({ ar: "إرسال بالإيميل", en: "Send by email" })}
+              {t({ ar: "أو ابعته بالإيميل", en: "Or send by email" })}
             </a>
             <a aria-disabled={!can[2]} href={can[2] ? whatsappLink(message) : undefined} target="_blank" rel="noopener noreferrer"
               className={`inline-flex h-11 items-center gap-2 rounded bg-emerald px-5 text-[15px] font-medium text-white transition-colors hover:bg-emerald/90 ${can[2] ? "" : "pointer-events-none opacity-40"}`}>
-              <WhatsAppGlyph className="h-[18px] w-[18px]" />{t({ ar: "احجز عبر واتساب", en: "Book via WhatsApp" })}
+              <WhatsAppGlyph className="h-[18px] w-[18px]" />{t({ ar: "ابعت الطلب على واتساب", en: "Send request on WhatsApp" })}
             </a>
           </div>
         )}
@@ -151,8 +151,8 @@ export function DemoModal() {
             className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-md border border-ruleStrong bg-paper p-6 shadow-[0_30px_60px_-20px_rgb(11_17_32/0.45)] sm:p-8">
             <div className="mb-6 flex items-start justify-between gap-4">
               <div>
-                <h2 id="demo-title" className="text-[22px] font-semibold text-ink">{t({ ar: "احجز ديمو عملي", en: "Book a live demo" })}</h2>
-                <p className="mt-1 text-[14px] text-muted">{t({ ar: "على نشاطك أنت — مش عرض عام.", en: "Built around your business — not a generic tour." })}</p>
+                <h2 id="demo-title" className="text-[22px] font-semibold text-ink">{t({ ar: "احجز عرض حي مجاني", en: "Book a free live demo" })}</h2>
+                <p className="mt-1 text-[14px] text-muted">{t({ ar: "20 دقيقة على دورة شغلك أنت — مجانًا وبدون التزام.", en: "20 minutes on your own workflow — free, no commitment." })}</p>
               </div>
               <button type="button" onClick={closeDemo} aria-label={t({ ar: "إغلاق", en: "Close" })} className="grid h-9 w-9 place-items-center rounded border border-ruleStrong text-ink2 hover:text-ink">
                 <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M5 5l10 10M15 5 5 15" strokeLinecap="round" /></svg>
@@ -169,16 +169,17 @@ export function DemoModal() {
 export default function DemoHub() {
   const { t } = useApp();
   const agenda: L[] = [
-    { ar: "نراجع دورتك الحالية: من أول طلب الشراء لحد القيد.", en: "We review your current cycle, from purchase request to journal entry." },
-    { ar: "نشغّل نفس الدورة على نكسورا ببيانات شبه بياناتك.", en: "We run the same cycle in NEXORA with data like yours." },
-    { ar: "تخرج بخطة تشغيل: الموديولات، الصلاحيات، وترحيل الأرصدة الافتتاحية.", en: "You leave with a rollout plan: modules, permissions and opening-balance migration." },
+    { ar: "نسمع منك: إزاي الشغل ماشي النهارده، ومنين الفلوس بتضيع.", en: "We listen: how work runs today, and where money slips away." },
+    { ar: "نشغّل دورة شغلك على نكسورا قدامك، ببيانات شبه بياناتك.", en: "We run your cycle in NEXORA in front of you, with data like yours." },
+    { ar: "تخرج بخطة واضحة: الإدارات اللي تحتاجها، والصلاحيات، ونقل أرصدتك الحالية.", en: "You leave with a clear plan: the departments you need, permissions, and moving your current balances over." },
   ];
   return (
     <Section
       id="demo"
       index="05"
-      label={{ ar: "احجز ديمو", en: "Book a demo" }}
-      title={{ ar: "ديمو على نشاطك، مش عرض عام.", en: "A demo of your business, not a generic tour." }}
+      label={{ ar: "عرض حي مجاني", en: "Free live demo" }}
+      title={{ ar: "شوف شركتك شغالة على نكسورا قبل ما تقرر.", en: "See your own company running on NEXORA before you decide." }}
+      lead={{ ar: "جرّب النظام بنفسك في جلسة مباشرة لمدة 20 دقيقة، نطبّق فيها دورة عمل شركتك بالكامل — مجانًا وبدون أي التزام.", en: "Try the system yourself in a live 20-minute session where we run your company’s full cycle — free, with no commitment." }}
       aside={
         <ol className="border-t border-rule">
           {agenda.map((a, k) => (

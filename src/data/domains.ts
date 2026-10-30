@@ -4,9 +4,9 @@ export type Impact = { acc: string; name: L; dr?: number; cr?: number };
 export type Domain = {
   id: string;
   name: L;
+  /** The one-line business result this area delivers. */
+  pitch: L;
   capabilities: L[];
-  /** Prisma models behind this area — 60 in total across all domains. */
-  models: string[];
   doc: {
     title: L;
     no: string;
@@ -32,14 +32,14 @@ const A = {
 export const domains: Domain[] = [
   {
     id: "sales",
-    name: { ar: "المبيعات والتحصيل", en: "Sales & collections" },
+    name: { ar: "المبيعات والتقسيط", en: "Sales & installments" },
+    pitch: { ar: "بيع نقدي وآجل وتقسيط، مع سقف ائتمان ذكي يوقف البيع لعميل متعثر قبل ما الفاتورة تطلع.", en: "Sell for cash, on credit or in installments — with a smart credit limit that stops a sale to a struggling customer before the invoice goes out." },
     capabilities: [
-      { ar: "عرض سعر بيتحوّل لفاتورة بضغطة", en: "Quotations that convert to invoices in one step" },
-      { ar: "خصم على السطر وعلى الفاتورة، وضريبة محسوبة", en: "Line and invoice discounts with tax calculated" },
-      { ar: "فحص حد ائتمان العميل وقت الفاتورة", en: "Customer credit limit checked at invoicing" },
-      { ar: "مرتجع مبيعات بيعكس المخزون والقيد", en: "Sales returns that reverse stock and the entry" },
+      { ar: "عرض السعر يتحول لفاتورة بضغطة، من غير إعادة كتابة", en: "Turn a quotation into an invoice in one click — no retyping" },
+      { ar: "خصومات على الصنف أو الفاتورة، والضريبة محسوبة لوحدها", en: "Discounts per line or per invoice, tax calculated for you" },
+      { ar: "البيع الآجل فوق حد العميل بيقف إلا بموافقة المدير", en: "Credit sales over a customer’s limit stop unless a manager approves" },
+      { ar: "المرتجع بيرجّع البضاعة للمخزن ويعدّل الحساب تلقائيًا", en: "Returns put stock back and correct the books automatically" },
     ],
-    models: ["SaleInvoice", "SaleInvoiceLine", "Quotation", "QuotationLine", "Customer", "CustomerFollowUp", "CustomerComplaint"],
     doc: {
       title: { ar: "فاتورة مبيعات", en: "Sales invoice" },
       no: "INV-2026-0162",
@@ -53,7 +53,7 @@ export const domains: Domain[] = [
         cols: [{ ar: "الصنف", en: "Item" }, { ar: "الكمية", en: "Qty" }, { ar: "السعر", en: "Price" }, { ar: "القيمة", en: "Amount" }],
         rows: [
           [{ ar: "طقم غرفة نوم خشب زان", en: "Beech bedroom set" }, "2", "4,200.00", "8,400.00"],
-          [{ ar: "طاولة سفرة ٨ كراسي رخام", en: "8-chair marble dining table" }, "1", "5,200.00", "5,200.00"],
+          [{ ar: "طاولة سفرة 8 كراسي رخام", en: "8-chair marble dining table" }, "1", "5,200.00", "5,200.00"],
           [{ ar: "كرسي مكتب جلد طبي", en: "Ergonomic office chair" }, "2", "850.00", "1,700.00"],
         ],
       },
@@ -61,7 +61,7 @@ export const domains: Domain[] = [
       options: [
         {
           l: { ar: "آجل", en: "Credit" },
-          note: { ar: "القيد اتعمل لحظة الحفظ، والتكلفة اتسحبت من المخزن بالمتوسط المرجح.", en: "Posted on save; cost relieved from stock at weighted average." },
+          note: { ar: "اتسجل كله لحظة الحفظ: مديونية العميل، والضريبة، وتكلفة البضاعة اللي خرجت من المخزن.", en: "All recorded on save: the customer’s balance, the tax, and the cost of the goods that left the warehouse." },
           impact: [
             { acc: "1120", name: A.cust, dr: 17442 }, { acc: "4101", name: A.salesCredit, cr: 15300 }, { acc: "2300", name: A.tax, cr: 2142 },
             { acc: "5000", name: A.cogs, dr: 10820 }, { acc: "1130", name: A.inv, cr: 10820 },
@@ -69,7 +69,7 @@ export const domains: Domain[] = [
         },
         {
           l: { ar: "نقدي", en: "Cash" },
-          note: { ar: "الخزنة بتتحمّل بدل حساب العميل — نفس قاعدة الترحيل.", en: "The till is debited instead of the customer — same posting rule." },
+          note: { ar: "الفلوس دخلت الخزنة على طول بدل ما تتسجل على العميل.", en: "The cash goes straight into the till instead of onto the customer’s account." },
           impact: [
             { acc: "1101", name: A.cash, dr: 17442 }, { acc: "4100", name: A.salesCash, cr: 15300 }, { acc: "2300", name: A.tax, cr: 2142 },
             { acc: "5000", name: A.cogs, dr: 10820 }, { acc: "1130", name: A.inv, cr: 10820 },
@@ -81,12 +81,12 @@ export const domains: Domain[] = [
   {
     id: "purchasing",
     name: { ar: "المشتريات والموردين", en: "Purchasing & suppliers" },
+    pitch: { ar: "مفيش شراء من غير طلب واعتماد؛ كل جنيه بيطلع للمورد معروف مين طلبه ومين وافق عليه.", en: "No purchase without a request and an approval — every pound paid to a supplier shows who asked and who signed off." },
     capabilities: [
-      { ar: "طلب شراء من القسم ← أمر شراء معتمد ← فاتورة مورد", en: "Department requisition → approved PO → supplier invoice" },
-      { ar: "استلام جزئي ومتابعة المتبقي على أمر الشراء", en: "Partial receipts with the remainder tracked on the PO" },
-      { ar: "كشف حساب مورد ومرتجع مشتريات", en: "Supplier statements and purchase returns" },
+      { ar: "طلب شراء ← أمر شراء معتمد ← فاتورة مورد، في مسار واحد", en: "Request → approved order → supplier invoice, in one path" },
+      { ar: "استلام جزئي ومتابعة الباقي على أمر الشراء", en: "Partial deliveries with the balance tracked on the order" },
+      { ar: "تنبيه بمواعيد سداد الموردين قبل ما تتأخر", en: "Alerts before supplier payments fall due" },
     ],
-    models: ["PurchaseRequest", "PurchaseOrder", "PurchaseInvoice", "PurchaseInvoiceLine", "Supplier"],
     doc: {
       title: { ar: "فاتورة مشتريات", en: "Purchase invoice" },
       no: "PI-2026-0133",
@@ -100,7 +100,7 @@ export const domains: Domain[] = [
         cols: [{ ar: "الصنف", en: "Item" }, { ar: "الكمية", en: "Qty" }, { ar: "التكلفة", en: "Cost" }, { ar: "القيمة", en: "Amount" }],
         rows: [
           [{ ar: "كنبة زاوية قماش", en: "Fabric corner sofa" }, "8", "2,200.00", "17,600.00"],
-          [{ ar: "ستارة بلاك أوت ٣م", en: "Blackout curtain 3m" }, "20", "260.00", "5,200.00"],
+          [{ ar: "ستارة بلاك أوت 3م", en: "Blackout curtain 3m" }, "20", "260.00", "5,200.00"],
         ],
       },
       switchLabel: { ar: "السداد", en: "Settlement" },
@@ -121,13 +121,13 @@ export const domains: Domain[] = [
   {
     id: "inventory",
     name: { ar: "المخازن والتكلفة", en: "Inventory & costing" },
+    pitch: { ar: "اعرف تكلفة كل صنف في كل مخزن بالقرش، واكشف العجز والهالك والنواقص قبل ما ياكلوا رأس مالك.", en: "Know the cost of every item in every warehouse to the piastre, and catch shortages, waste and low stock before they eat your capital." },
     capabilities: [
-      { ar: "حساب تكلفة الصنف بالمتوسط المرجح لكل مخزن", en: "Item cost as a weighted average per warehouse" },
-      { ar: "تحويلات بين المخازن والفروع", en: "Transfers between warehouses and branches" },
-      { ar: "جرد فعلي وتسويات التالف والعجز بقيد تلقائي", en: "Physical counts, damage and shortage write-offs posted automatically" },
-      { ar: "ملصقات باركود للأصناف", en: "Barcode labels for items" },
+      { ar: "تكلفة حقيقية لكل صنف في كل مخزن — مش تقدير", en: "Real cost per item per warehouse — not an estimate" },
+      { ar: "جرد فعلي يطلّعلك الفرق، والتالف والعجز بيتسجلوا بقيمتهم", en: "Physical counts show the gap; damage and shortages are booked at their value" },
+      { ar: "تنبيه لما صنف يقرب يخلص", en: "An alert when an item is running low" },
+      { ar: "تحويل بين المخازن والفروع، وطباعة باركود للأصناف", en: "Transfers between warehouses and branches, and barcode label printing" },
     ],
-    models: ["Item", "Unit", "Category", "Warehouse", "StockMovement", "InventoryBalance", "OpeningStock", "InventoryCount", "InventoryCountLine"],
     doc: {
       title: { ar: "تسوية مخزنية", en: "Stock adjustment" },
       no: "ADJ-2026-0031",
@@ -162,13 +162,13 @@ export const domains: Domain[] = [
   {
     id: "treasury",
     name: { ar: "الخزينة والشيكات والأقساط", en: "Treasury, cheques & installments" },
+    pitch: { ar: "مفيش شيك هيفوت ميعاده ولا قسط هيتنسي — تنبيهات تلقائية بمواعيد التحصيل والسداد، وحركة الخزينة لحظة بلحظة.", en: "No cheque misses its date and no installment is forgotten — automatic alerts for collections and payments, and the till moving in real time." },
     capabilities: [
-      { ar: "سندات قبض وصرف على الخزنة أو البنك", en: "Receipt and payment vouchers against till or bank" },
-      { ar: "حافظة الشيكات: تحت التحصيل، تم التحصيل، مرتد", en: "Cheque portfolio: pending, collected, bounced" },
-      { ar: "جدولة الأقساط وتخصيص كل دفعة على قسطها", en: "Installment schedules with every payment allocated" },
-      { ar: "مصروفات دورية بتتسجل في ميعادها", en: "Recurring expenses recorded on schedule" },
+      { ar: "حافظة شيكات واضحة: تحت التحصيل، اتحصّل، مرتد", en: "A clear cheque portfolio: pending, collected, bounced" },
+      { ar: "جدول أقساط لكل عميل، وكل دفعة بتتخصم من قسطها", en: "An installment plan per customer, every payment applied to its installment" },
+      { ar: "تنبيه بالشيكات اللي قرّب ميعادها والأقساط المتأخرة", en: "Alerts for cheques coming due and overdue installments" },
+      { ar: "المصروفات الثابتة بتتسجل في ميعادها من غير ما حد يفتكر", en: "Fixed expenses recorded on schedule without anyone remembering" },
     ],
-    models: ["Voucher", "BankCheque", "InstallmentSchedule", "Installment", "InstallmentAllocation", "RecurringExpense", "ExpenseType"],
     doc: {
       title: { ar: "شيك وارد", en: "Incoming cheque" },
       no: "CHQ-00418",
@@ -204,14 +204,14 @@ export const domains: Domain[] = [
   },
   {
     id: "ledger",
-    name: { ar: "الحسابات العامة", en: "General ledger" },
+    name: { ar: "الحسابات العامة", en: "Accounts & reports" },
+    pitch: { ar: "مش محتاج تستنى آخر الشهر عشان تعرف كسبت كام؛ كل فاتورة أو إذن مخزن بيحدّث قائمة الدخل وميزان المراجعة في نفس الثانية.", en: "No waiting for month end to know what you made — every invoice and stock voucher updates the income statement and trial balance the same second." },
     capabilities: [
-      { ar: "الترحيل اللحظي لقيود اليومية من ١٨ قاعدة", en: "Instant journal posting from 18 rules" },
-      { ar: "إقفال الفترات المالية ومنع التعديل بأثر رجعي", en: "Closing periods and blocking back-dated edits" },
-      { ar: "ميزان مراجعة، قائمة دخل، ميزانية، تدفقات نقدية", en: "Trial balance, income statement, balance sheet, cash flow" },
-      { ar: "أصول ثابتة بالإهلاك، ومراكز تكلفة، وإقفال سنوي", en: "Depreciating fixed assets, cost centers and year-end close" },
+      { ar: "قائمة دخل، ميزانية، تدفقات نقدية، وميزان مراجعة جاهزين في أي وقت", en: "Income statement, balance sheet, cash flow and trial balance ready any time" },
+      { ar: "الشهر اللي اتقفل محدش يقدر يغيّر أرقامه", en: "Once a month is closed, nobody can change its numbers" },
+      { ar: "مراكز تكلفة تعرّفك كل فرع أو قسم بيصرف قد إيه", en: "Cost centers show what each branch or department spends" },
+      { ar: "الأصول الثابتة بإهلاكها، وإقفال السنة من غير وجع دماغ", en: "Fixed assets with depreciation, and a painless year-end close" },
     ],
-    models: ["Account", "PostingRule", "JournalEntry", "JournalLine", "AccountingPeriod", "YearCloseRun", "FixedAsset", "CostCenter", "TaxRate"],
     doc: {
       title: { ar: "قيد يدوي", en: "Manual entry" },
       no: "JV-2026-0892",
@@ -245,14 +245,56 @@ export const domains: Domain[] = [
     },
   },
   {
-    id: "hr",
-    name: { ar: "الموارد البشرية والرواتب", en: "HR & payroll" },
+    id: "customers",
+    name: { ar: "العملاء والموردين", en: "Customers & suppliers" },
+    pitch: { ar: "ملف كامل لكل عميل ومورد: كشف حساب ومديونية ومتابعات وشكاوى — وتنبيه أول ما عميل يعدّي حده.", en: "A complete file on every customer and supplier: statement, balance, follow-ups and complaints — with an alert the moment a customer goes over limit." },
     capabilities: [
-      { ar: "ورديات وحضور وانصراف وإجازات رسمية", en: "Shifts, attendance and public holidays" },
-      { ar: "مسير رواتب بالإضافي والخصومات", en: "Payroll runs with overtime and deductions" },
-      { ar: "تقييم أداء ومستندات الموظف في ملفه", en: "Performance reviews and employee documents on file" },
+      { ar: "كشف حساب جاهز تبعته للعميل في ثانية", en: "A statement ready to send to the customer in seconds" },
+      { ar: "متابعات تحصيل ومواعيد توصيل ليها مسؤول وميعاد", en: "Collection and delivery follow-ups with an owner and a date" },
+      { ar: "شكاوى ما بعد البيع متابعة لحد ما تتقفل", en: "After-sales complaints tracked until they are closed" },
     ],
-    models: ["Employee", "Shift", "AttendanceRecord", "PayrollEntry", "PerformanceReview", "EmployeeDocument", "PublicHoliday"],
+    doc: {
+      title: { ar: "كشف حساب عميل", en: "Customer statement" },
+      no: "CUST-022",
+      fields: [
+        { k: { ar: "العميل", en: "Customer" }, v: { ar: "فندق سان ستيفانو", en: "San Stefano Hotel" } },
+        { k: { ar: "حد الائتمان", en: "Credit limit" }, v: "40,000.00" },
+        { k: { ar: "الرصيد", en: "Balance" }, v: "46,850.00" },
+        { k: { ar: "آخر تحصيل", en: "Last payment" }, v: "2026-10-15" },
+      ],
+      lines: {
+        cols: [{ ar: "المستند", en: "Document" }, { ar: "التاريخ", en: "Date" }, { ar: "مدين", en: "Debit" }, { ar: "دائن", en: "Credit" }],
+        rows: [
+          ["INV-2026-0141", "2026-10-02", "33,500.00", "—"],
+          ["CHQ-00405", "2026-10-15", "—", "18,000.00"],
+          ["INV-2026-0160", "2026-10-28", "31,350.00", "—"],
+        ],
+      },
+      switchLabel: { ar: "فاتورة آجل جديدة بـ 11,400", en: "New credit invoice of 11,400" },
+      options: [
+        {
+          l: { ar: "بواسطة البائع", en: "By the salesperson" },
+          blocked: true,
+          note: { ar: "اتوقفت: العميل متجاوز حده الائتماني بـ 6,850. البيع الآجل محتاج موافقة المدير — أو تحصيل الأول.", en: "Stopped: the customer is already 6,850 over their credit limit. A credit sale needs manager approval — or a payment first." },
+          impact: [],
+        },
+        {
+          l: { ar: "بموافقة المدير", en: "With manager approval" },
+          note: { ar: "اتعدّت بموافقة المدير، والموافقة متسجلة باسمه في سجل الرقابة.", en: "Approved by the manager, and the approval is recorded under their name in the control log." },
+          impact: [{ acc: "1120", name: A.cust, dr: 11400 }, { acc: "4101", name: A.salesCredit, cr: 10000 }, { acc: "2300", name: A.tax, cr: 1400 }],
+        },
+      ],
+    },
+  },
+  {
+    id: "hr",
+    name: { ar: "شؤون الموظفين والرواتب", en: "People & payroll" },
+    pitch: { ar: "الحضور والانصراف، الورديات، السلف، والرواتب مربوطة بحسابات الشركة بضغطة زرار.", en: "Attendance, shifts, advances and payroll — tied to the company’s books in one click." },
+    capabilities: [
+      { ar: "ورديات وحضور وانصراف وتأخير محسوب لوحده", en: "Shifts, attendance and lateness calculated for you" },
+      { ar: "مسير رواتب بالإضافي والسلف والخصومات", en: "Payroll with overtime, advances and deductions" },
+      { ar: "ملف لكل موظف: مستنداته وتقييم أدائه", en: "A file per employee: documents and performance reviews" },
+    ],
     doc: {
       title: { ar: "مسير رواتب", en: "Payroll run" },
       no: "PAY-2026-10",
@@ -284,14 +326,14 @@ export const domains: Domain[] = [
   },
   {
     id: "control",
-    name: { ar: "الصلاحيات والفروع والرقابة", en: "Permissions, branches & control" },
+    name: { ar: "الفروع والصلاحيات", en: "Branches & permissions" },
+    pitch: { ar: "كل موظف يشوف فرعه وشغله بس، وإنت كمدير تشوف الشركة كلها من الموبايل أو اللابتوب من أي مكان.", en: "Each employee sees only their branch and their work; you see the whole company from your phone or laptop, anywhere." },
     capabilities: [
-      { ar: "أدوار مخصصة فوق أدوار النظام الثلاثة", en: "Custom roles on top of the three system roles" },
-      { ar: "نطاق بيانات لكل موديول: فرع المستخدم أو الشركة كلها", en: "Data scope per module: the user's branch or the whole company" },
-      { ar: "تشغيل وإيقاف الموديولات، وسجل مراجعة لكل عملية", en: "Modules on/off, and an audit trail for every write" },
-      { ar: "منع تكرار العملية لو اتضغط «حفظ» مرتين", en: "Duplicate protection when “Save” is pressed twice" },
+      { ar: "صلاحيات على مقاس كل وظيفة: عرض، إنشاء، تعديل", en: "Permissions cut to each job: view, create, edit" },
+      { ar: "سجل رقابة بيقولك مين عمل إيه وإمتى", en: "A control log of who did what, and when" },
+      { ar: "حماية ضد الأخطاء: الفاتورة مستحيل تتسجل مرتين", en: "Protection against mistakes: an invoice can never be saved twice" },
+      { ar: "شغّل الإدارات اللي محتاجها بس، وزوّد بعدين", en: "Switch on only the departments you need, add more later" },
     ],
-    models: ["User", "Session", "RoleRecord", "Permission", "Module", "UserModuleScope", "Branch", "UserBranch", "AuditLog", "IdempotencyKey", "ClientConfig", "CompanySettings", "Counter", "ReferenceList", "ReferenceListItem", "Transaction"],
     doc: {
       title: { ar: "صلاحيات مستخدم", en: "User permissions" },
       no: "USR-0014",
@@ -302,7 +344,7 @@ export const domains: Domain[] = [
         { k: { ar: "آخر دخول", en: "Last sign-in" }, v: "2026-10-29 09:14" },
       ],
       lines: {
-        cols: [{ ar: "الموديول", en: "Module" }, { ar: "عرض", en: "View" }, { ar: "إنشاء", en: "Create" }, { ar: "تعديل", en: "Edit" }],
+        cols: [{ ar: "الإدارة", en: "Department" }, { ar: "عرض", en: "View" }, { ar: "إنشاء", en: "Create" }, { ar: "تعديل", en: "Edit" }],
         rows: [
           [{ ar: "المبيعات", en: "Sales" }, "✓", "✓", "✓"],
           [{ ar: "المشتريات", en: "Purchasing" }, "✓", "✓", "—"],
@@ -311,8 +353,8 @@ export const domains: Domain[] = [
       },
       switchLabel: { ar: "نطاق بيانات المبيعات", en: "Sales data scope" },
       options: [
-        { l: { ar: "فرعه فقط", en: "Own branch" }, note: { ar: "كريم شايف فواتير الإسكندرية بس — ٣ من ٧.", en: "Karim sees Alexandria invoices only — 3 of 7." }, impact: [] },
-        { l: { ar: "الشركة كلها", en: "Company-wide" }, note: { ar: "كريم شايف فواتير كل الفروع — ٧ من ٧.", en: "Karim sees invoices from every branch — 7 of 7." }, impact: [] },
+        { l: { ar: "فرعه فقط", en: "Own branch" }, note: { ar: "كريم شايف فواتير الإسكندرية بس — 3 من 7.", en: "Karim sees Alexandria invoices only — 3 of 7." }, impact: [] },
+        { l: { ar: "الشركة كلها", en: "Company-wide" }, note: { ar: "كريم شايف فواتير كل الفروع — 7 من 7.", en: "Karim sees invoices from every branch — 7 of 7." }, impact: [] },
       ],
     },
   },

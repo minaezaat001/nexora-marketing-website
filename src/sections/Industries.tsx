@@ -20,19 +20,47 @@ type Segment = {
 
 const segments: Segment[] = [
   {
-    id: "factory",
-    tab: { ar: "مصانع وخطوط إنتاج", en: "Factories" },
-    headline: { ar: "اعرف تكلفة الخامة الحقيقية في كل مخزن — قبل ما تسعّر.", en: "Know the true cost of every raw material, per warehouse — before you price." },
+    id: "showroom",
+    tab: { ar: "المعارض والبيع بالتقسيط", en: "Showrooms & installments" },
+    headline: { ar: "بيع بالتقسيط وإنت مطمّن: كل قسط له ميعاد، وكل عميل له حد، وكل شكوى لها متابعة.", en: "Sell on installments with peace of mind: every installment has a date, every customer a limit, every complaint a follow-up." },
     pains: [
-      { ar: "الخامات بتتصرف من غير ما حد يعرف رصيدها الفعلي في مخزن المصنع.", en: "Materials get issued without anyone knowing the real balance at the plant store." },
-      { ar: "التالف والهالك بيتشال من الدفاتر في آخر السنة بدل ما يتسجل أول بأول.", en: "Scrap and waste are written off at year end instead of as they happen." },
-      { ar: "طلبات الشراء بتتبعت على واتساب ومفيش أمر شراء معتمد.", en: "Purchase requests travel over chat with no approved purchase order behind them." },
+      { ar: "جدول الأقساط في كشكول، والمتأخر بتعرفه بعد شهرين.", en: "The installment plan lives in a notebook, and you find out about late payers two months later." },
+      { ar: "العميل بيشتري تاني وهو لسه عليه فلوس، ومحدش بيوقفه.", en: "Customers buy again while they still owe you, and nobody stops them." },
+      { ar: "رصيد المعرض غير رصيد المخزن، والعميل بيستنى قطعة مش موجودة.", en: "Showroom stock doesn’t match the warehouse, and a customer waits for a piece you don’t have." },
+      { ar: "شكاوى ما بعد البيع بتضيع بين المعرض والتوصيل.", en: "After-sales complaints get lost between the showroom and delivery." },
     ],
-    flow: [{ ar: "طلب شراء خامة", en: "Material requisition" }, { ar: "أمر شراء معتمد", en: "Approved PO" }, { ar: "استلام بمخزن الخامات", en: "Receive to raw-materials store" }, { ar: "تحويل لخط الإنتاج", en: "Transfer to the line" }, { ar: "تسوية تالف / عجز", en: "Damage / shortage adjustment" }],
+    flow: [{ ar: "عرض سعر للعميل", en: "Quotation to the customer" }, { ar: "فاتورة آجل في حدود ائتمانه", en: "Credit invoice within their limit" }, { ar: "جدول أقساط بمواعيده", en: "Installment schedule with dates" }, { ar: "تنبيه بالمتأخر وتحصيل", en: "Late-payment alert and collection" }, { ar: "متابعة وشكاوى ما بعد البيع", en: "After-sales follow-up and complaints" }],
     watch: [
-      { k: { ar: "متوسط تكلفة الخامة", en: "Avg. material cost" }, v: { ar: "لكل صنف × مخزن", en: "per item × warehouse" }, tone: "info" },
-      { k: { ar: "التالف والعجز", en: "Damage & shortage" }, v: { ar: "بقيد تلقائي", en: "posted automatically" }, tone: "ok" },
-      { k: { ar: "أصول وماكينات", en: "Plant & machinery" }, v: { ar: "إهلاك شهري", en: "monthly depreciation" }, tone: "info" },
+      { k: { ar: "الأقساط المتأخرة", en: "Overdue installments" }, v: { ar: "تنبيه تلقائي", en: "automatic alert" }, tone: "warn" },
+      { k: { ar: "حد ائتمان العميل", en: "Customer credit limit" }, v: { ar: "بيوقف البيع الآجل", en: "stops credit sales" }, tone: "ok" },
+      { k: { ar: "رصيد المعرض والمخزن", en: "Showroom vs. warehouse" }, v: { ar: "كل مخزن برصيده", en: "each with its own stock" }, tone: "info" },
+    ],
+    screen: {
+      title: { ar: "جدول أقساط — INV-2026-0162", en: "Installment schedule — INV-2026-0162" },
+      cols: [{ ar: "القسط", en: "No." }, { ar: "الاستحقاق", en: "Due" }, { ar: "الحالة", en: "Status" }, { ar: "المبلغ", en: "Amount" }],
+      rows: [
+        ["1/4", "2026-09-30", { ar: "مسدد", en: "Paid" }, "4,560"],
+        ["2/4", "2026-10-30", { ar: "مسدد جزئيًا — تنبيه", en: "Part-paid — alert" }, "4,560"],
+        ["3/4", "2026-11-30", { ar: "قادم", en: "Upcoming" }, "4,560"],
+      ],
+    },
+    modules: ["sales", "treasury", "customers"],
+  },
+  {
+    id: "factory",
+    tab: { ar: "المصانع والتشغيل", en: "Factories & production" },
+    headline: { ar: "اعرف بتصرف كام على كل خامة في كل مخزن — وامسك الهالك قبل ما يبقى خسارة.", en: "Know what every raw material really costs in every warehouse — and catch waste before it becomes a loss." },
+    pains: [
+      { ar: "الخامات بتتصرف للخط من غير ما حد يعرف رصيدها الحقيقي.", en: "Materials go to the line without anyone knowing the real balance." },
+      { ar: "التالف والهالك بيتشال من الدفاتر آخر السنة، بعد ما الخسارة حصلت.", en: "Scrap and waste are written off at year end, after the loss has happened." },
+      { ar: "طلبات الشراء بتتبعت على واتساب، ومفيش أمر شراء معتمد وراها.", en: "Purchase requests travel over chat with no approved order behind them." },
+      { ar: "مش عارف كل خط إنتاج بيصرف قد إيه.", en: "You can’t tell what each production line is spending." },
+    ],
+    flow: [{ ar: "طلب شراء خامة", en: "Material requisition" }, { ar: "أمر شراء معتمد", en: "Approved purchase order" }, { ar: "استلام بمخزن الخامات بالتكلفة", en: "Receipt into the materials store at cost" }, { ar: "تحويل لمخزن خط الإنتاج", en: "Transfer to the production-line store" }, { ar: "جرد وتسوية التالف والعجز", en: "Count and write off damage and shortages" }],
+    watch: [
+      { k: { ar: "تكلفة الخامة", en: "Material cost" }, v: { ar: "لكل صنف في كل مخزن", en: "per item, per warehouse" }, tone: "info" },
+      { k: { ar: "التالف والعجز", en: "Damage & shortages" }, v: { ar: "بيتسجلوا بقيمتهم فورًا", en: "booked at value, immediately" }, tone: "ok" },
+      { k: { ar: "مصروفات كل خط", en: "Spend per line" }, v: { ar: "على مركز تكلفته", en: "on its own cost center" }, tone: "info" },
     ],
     screen: {
       title: { ar: "تسويات المخزون — مخزن الخامات", en: "Stock adjustments — raw materials" },
@@ -40,96 +68,72 @@ const segments: Segment[] = [
       rows: [
         ["ADJ-0031", { ar: "ألواح خشب زان", en: "Beech panels" }, { ar: "تالف", en: "Damage" }, "−12"],
         ["ADJ-0032", { ar: "قماش تنجيد", en: "Upholstery fabric" }, { ar: "عجز جرد", en: "Count shortage" }, "−8"],
-        ["TRF-0144", { ar: "إسفنج ضغط عالي", en: "High-density foam" }, { ar: "تحويل للخط ٢", en: "Transfer to line 2" }, "40"],
+        ["TRF-0144", { ar: "إسفنج ضغط عالي", en: "High-density foam" }, { ar: "تحويل للخط 2", en: "Transfer to line 2" }, "40"],
       ],
     },
-    roadmap: { ar: "أوامر الإنتاج وقوائم المواد (BOM) على خارطة التطوير — كلّمنا عن خط إنتاجك.", en: "Production orders and bills of materials (BOM) are on the roadmap — tell us about your line." },
+    roadmap: { ar: "أوامر الإنتاج وقوائم المواد (BOM) على خطة التطوير — كلّمنا عن خط إنتاجك.", en: "Production orders and bills of materials (BOM) are on the roadmap — tell us about your line." },
     modules: ["inventory", "purchasing", "ledger"],
   },
   {
     id: "company",
-    tab: { ar: "شركات متوسطة", en: "Mid-size companies" },
-    headline: { ar: "فروع كتير، دفاتر واحدة — وكل مدير شايف فرعه بس.", en: "Many branches, one set of books — and each manager sees only their branch." },
+    tab: { ar: "الشركات وتعدد الفروع", en: "Multi-branch companies" },
+    headline: { ar: "كل فروعك في تقرير واحد — والأرقام اللي اتقفلت محدش يقدر يلعب فيها.", en: "Every branch in one report — and closed numbers nobody can touch." },
     pains: [
-      { ar: "كل فرع شغال على شيت لوحده، والتجميع آخر الشهر بياخد أسبوع.", en: "Each branch runs its own spreadsheet; month-end consolidation takes a week." },
-      { ar: "الموظف شايف أرقام الشركة كلها لأن الصلاحيات كلها أو لا شيء.", en: "Staff see company-wide numbers because permissions are all-or-nothing." },
-      { ar: "حد بيعدّل قيد في شهر اتقفل، والميزانية بتتغير بعد ما اتسلمت.", en: "Someone edits an entry in a closed month and the signed-off balance sheet changes." },
+      { ar: "كل فرع شغال على شيت، وتجميع آخر الشهر بياخد أسبوع.", en: "Each branch has its own sheet, and month-end consolidation takes a week." },
+      { ar: "موظف الفرع شايف أرقام الشركة كلها.", en: "Branch staff can see the whole company’s numbers." },
+      { ar: "حد بيعدّل في شهر اتقفل، والميزانية بتتغير بعد ما اتسلمت.", en: "Someone edits a closed month and the signed-off balance sheet changes." },
+      { ar: "لما يحصل غلط، مفيش حد يقولك مين عمله.", en: "When something goes wrong, nobody can tell you who did it." },
     ],
-    flow: [{ ar: "مستند في الفرع", en: "Branch document" }, { ar: "قيد تلقائي بمركز تكلفة", en: "Auto entry with cost center" }, { ar: "أرصدة موحدة", en: "Consolidated balances" }, { ar: "قفل الفترة", en: "Lock the period" }, { ar: "إقفال سنوي", en: "Year-end close" }],
+    flow: [{ ar: "كل فرع يسجل شغله", en: "Each branch records its work" }, { ar: "القيود بتتعمل لوحدها بمركز التكلفة", en: "Entries post themselves with cost centers" }, { ar: "أرصدة موحدة للشركة", en: "Consolidated company balances" }, { ar: "قفل الشهر", en: "Close the month" }, { ar: "إقفال السنة", en: "Close the year" }],
     watch: [
-      { k: { ar: "نطاق البيانات", en: "Data scope" }, v: { ar: "فرع أو شركة", en: "branch or company" }, tone: "info" },
-      { k: { ar: "الفترات المقفلة", en: "Locked periods" }, v: { ar: "الترحيل ممنوع", en: "posting blocked" }, tone: "ok" },
-      { k: { ar: "سجل المراجعة", en: "Audit log" }, v: { ar: "على كل عملية", en: "on every write" }, tone: "ok" },
+      { k: { ar: "سجل الرقابة", en: "Control log" }, v: { ar: "مين عمل إيه وإمتى", en: "who did what, and when" }, tone: "ok" },
+      { k: { ar: "الشهور المقفولة", en: "Closed months" }, v: { ar: "ممنوع التعديل", en: "no edits allowed" }, tone: "ok" },
+      { k: { ar: "لوحة المدير", en: "Owner’s dashboard" }, v: { ar: "الشركة كلها لحظيًا", en: "the whole company, live" }, tone: "info" },
     ],
     screen: {
       title: { ar: "الأرصدة الموحدة حسب الفرع", en: "Consolidated balances by branch" },
       cols: [{ ar: "الحساب", en: "Account" }, { ar: "القاهرة", en: "Cairo" }, { ar: "الإسكندرية", en: "Alexandria" }, { ar: "الإجمالي", en: "Total" }],
       rows: [
-        [{ ar: "1101 الخزنة", en: "1101 Cash" }, "42,180", "16,147", "58,327"],
-        [{ ar: "1120 العملاء", en: "1120 Customers" }, "78,920", "32,794", "111,714"],
-        [{ ar: "4100 المبيعات", en: "4100 Sales" }, "412,600", "235,330", "647,930"],
+        [{ ar: "الخزنة", en: "Cash" }, "42,180", "16,147", "58,327"],
+        [{ ar: "العملاء", en: "Customers" }, "78,920", "32,794", "111,714"],
+        [{ ar: "المبيعات", en: "Sales" }, "412,600", "235,330", "647,930"],
       ],
     },
     modules: ["ledger", "control", "hr"],
   },
   {
     id: "retail",
-    tab: { ar: "محلات وتجارة جملة", en: "Retail & wholesale" },
-    headline: { ar: "فاتورة في ثواني بالباركود — والمخزن والخزنة بيتحدّثوا لوحدهم.", en: "Barcode-fast invoices — stock and cash update themselves." },
+    tab: { ar: "المحلات والتجارة والتوزيع", en: "Retail, wholesale & distribution" },
+    headline: { ar: "فاتورة في ثواني بالباركود — وتعرف رصيد خزنتك ومخزنك آخر كل يوم بالظبط.", en: "Barcode-fast invoices — and the exact cash and stock position at the end of every day." },
     pains: [
       { ar: "الكاشير بيكتب الصنف بإيده، والأسعار بتختلف من فرع لفرع.", en: "Cashiers type items by hand and prices drift between branches." },
-      { ar: "مش عارف مين من العملاء عدّى حد الائتمان إلا لما الفلوس تقع.", en: "You learn a customer blew their credit limit only after the money is gone." },
-      { ar: "شيكات الموردين في درج، ومحدش فاكر ميعاد استحقاقها.", en: "Supplier cheques live in a drawer and nobody remembers the due dates." },
+      { ar: "عميل الآجل بيعدّي حده، وبتعرف لما الفلوس تقع.", en: "Credit customers go over their limit and you only find out when the money is gone." },
+      { ar: "حسابات الموردين في دفتر، ومواعيد السداد بتفاجئك.", en: "Supplier accounts live in a ledger book and due dates take you by surprise." },
+      { ar: "الخزنة آخر اليوم مش مطابقة، ومحدش عارف الفرق راح فين.", en: "The till doesn’t match at close and nobody knows where the gap went." },
     ],
-    flow: [{ ar: "ملصق باركود", en: "Barcode label" }, { ar: "فاتورة نقدي / آجل", en: "Cash / credit invoice" }, { ar: "خصم المخزن بالتكلفة", en: "Stock relieved at cost" }, { ar: "سند قبض", en: "Receipt voucher" }, { ar: "لوحة الخزينة", en: "Treasury dashboard" }],
+    flow: [{ ar: "طباعة باركود للأصناف", en: "Print barcode labels" }, { ar: "فاتورة نقدي أو آجل", en: "Cash or credit invoice" }, { ar: "المخزن بينقص بالتكلفة", en: "Stock relieved at cost" }, { ar: "سند قبض للخزنة", en: "Receipt into the till" }, { ar: "رصيد الخزنة والمخزن آخر اليوم", en: "End-of-day cash and stock position" }],
     watch: [
-      { k: { ar: "حد ائتمان العميل", en: "Customer credit limit" }, v: { ar: "بيتفحص وقت الفاتورة", en: "checked at invoicing" }, tone: "warn" },
-      { k: { ar: "عميل نقدي", en: "Walk-in customer" }, v: "CUST-CASH", tone: "info" },
-      { k: { ar: "تنبيهات الحد الأدنى", en: "Reorder alerts" }, v: { ar: "مركز التنبيهات", en: "alerts centre" }, tone: "ok" },
+      { k: { ar: "حد ائتمان العميل", en: "Customer credit limit" }, v: { ar: "بيتفحص مع كل فاتورة", en: "checked on every invoice" }, tone: "warn" },
+      { k: { ar: "مستحقات الموردين", en: "Supplier payments" }, v: { ar: "تنبيه قبل الميعاد", en: "alert before due" }, tone: "ok" },
+      { k: { ar: "النواقص", en: "Low stock" }, v: { ar: "تنبيه قبل ما الصنف يخلص", en: "alert before it runs out" }, tone: "ok" },
     ],
     screen: {
       title: { ar: "آخر الفواتير — فرع المعرض", en: "Latest invoices — showroom" },
       cols: [{ ar: "الفاتورة", en: "Invoice" }, { ar: "العميل", en: "Customer" }, { ar: "النوع", en: "Type" }, { ar: "الإجمالي", en: "Total" }],
       rows: [
-        ["SI-0417", { ar: "عميل نقدي", en: "Walk-in" }, { ar: "نقدي", en: "Cash" }, "1,938"],
-        ["SI-0418", { ar: "شركة النيل للمقاولات", en: "Nile Contracting Co." }, { ar: "آجل", en: "Credit" }, "18,240"],
-        ["SI-0419", { ar: "عميل نقدي", en: "Walk-in" }, { ar: "نقدي", en: "Cash" }, "969"],
+        ["INV-2026-0161", { ar: "عميل نقدي", en: "Walk-in" }, { ar: "نقدي", en: "Cash" }, "4,788"],
+        ["INV-2026-0162", { ar: "شركة النيل للمقاولات", en: "Nile Contracting Co." }, { ar: "آجل", en: "Credit" }, "18,240"],
+        ["INV-2026-0163", { ar: "عميل نقدي", en: "Walk-in" }, { ar: "نقدي", en: "Cash" }, "969"],
       ],
     },
-    roadmap: { ar: "شاشة كاشير POS مخصصة وبرامج ولاء العملاء على خارطة التطوير.", en: "A dedicated POS cashier screen and loyalty programs are on the roadmap." },
+    roadmap: { ar: "شاشة كاشير (POS) مخصصة وبرامج ولاء العملاء على خطة التطوير.", en: "A dedicated POS cashier screen and loyalty programs are on the roadmap." },
     modules: ["sales", "inventory", "treasury"],
-  },
-  {
-    id: "showroom",
-    tab: { ar: "معارض وبيع بالتقسيط", en: "Showrooms & installments" },
-    headline: { ar: "بيع بالتقسيط من غير كشكول — كل قسط له ميعاد وتخصيص وقيد.", en: "Installment selling without the notebook — every payment has a date, an allocation and an entry." },
-    pains: [
-      { ar: "جدول الأقساط في كشكول، والتحصيل بيتسجل على الفاتورة الغلط.", en: "Installment plans live in a notebook and payments land on the wrong invoice." },
-      { ar: "مواعيد التوصيل والتركيب بتضيع بين المعرض والمخزن.", en: "Delivery and installation appointments get lost between showroom and warehouse." },
-      { ar: "شكاوى العملاء ملهاش متابعة ولا حد مسؤول عنها.", en: "Customer complaints have no owner and no follow-up." },
-    ],
-    flow: [{ ar: "عرض سعر", en: "Quotation" }, { ar: "فاتورة آجل", en: "Credit invoice" }, { ar: "جدول أقساط", en: "Installment schedule" }, { ar: "تحصيل وتخصيص", en: "Collect & allocate" }, { ar: "متابعة العميل", en: "Customer follow-up" }],
-    watch: [
-      { k: { ar: "أقساط متأخرة", en: "Overdue installments" }, v: { ar: "مركز التنبيهات", en: "alerts centre" }, tone: "warn" },
-      { k: { ar: "مركز تكلفة التوصيل", en: "Delivery cost center" }, v: "CC-002", tone: "info" },
-      { k: { ar: "الشكاوى", en: "Complaints" }, v: { ar: "متابعة لحد الإغلاق", en: "tracked to closure" }, tone: "ok" },
-    ],
-    screen: {
-      title: { ar: "جدول أقساط — SI-0418", en: "Installment schedule — SI-0418" },
-      cols: [{ ar: "القسط", en: "No." }, { ar: "الاستحقاق", en: "Due" }, { ar: "الحالة", en: "Status" }, { ar: "المبلغ", en: "Amount" }],
-      rows: [
-        ["1/4", "2026-09-30", { ar: "مسدد", en: "Paid" }, "4,560"],
-        ["2/4", "2026-10-30", { ar: "مسدد جزئيًا", en: "Partly paid" }, "4,560"],
-        ["3/4", "2026-11-30", { ar: "قادم", en: "Upcoming" }, "4,560"],
-      ],
-    },
-    modules: ["sales", "treasury"],
   },
 ];
 
 export default function Industries() {
   const { t, openDemo, setTopic } = useApp();
-  const [id, setId] = useState<Seg>("factory");
+  const [id, setId] = useState<Seg>("showroom");
   const s = segments.find((x) => x.id === id)!;
   const pick = (x: Segment) => { setId(x.id); setTopic(x.tab); };
 
@@ -152,8 +156,8 @@ export default function Industries() {
       id="industries"
       index="03"
       label={{ ar: "القطاعات", en: "Industries" }}
-      title={{ ar: "نفس النظام، بلغة نشاطك.", en: "One system, in the language of your trade." }}
-      lead={{ ar: "اختار نشاطك: المشكلة اللي بنقفلها، مسار الشغل جوه النظام، والشاشة اللي هتفتحها كل يوم.", en: "Pick your trade: the problem we close, the workflow inside the system, and the screen you'll open every day." }}
+      title={{ ar: "اختار نشاطك، وشوف إزاي بنقفل الثغرات اللي بتضيّع فلوسك.", en: "Pick your trade and see how we close the gaps that cost you money." }}
+      lead={{ ar: "كل نشاط ليه وجعه. هنا هتلاقي اللي بيحصل النهارده، وإزاي بيمشي الشغل في نكسورا، والشاشة اللي هتفتحها كل يوم.", en: "Every trade has its own headaches. Here’s what happens today, how the work runs in NEXORA, and the screen you’ll open every day." }}
       aside={list}
     >
       <AnimatePresence mode="wait">
@@ -172,7 +176,7 @@ export default function Industries() {
               </ul>
             </div>
             <div className="px-5 py-7 sm:px-8">
-              <p className="mb-4 text-[13px] text-muted">{t({ ar: "مسار الشغل في نكسورا", en: "The workflow in NEXORA" })}</p>
+              <p className="mb-4 text-[13px] text-muted">{t({ ar: "مع نكسورا", en: "With NEXORA" })}</p>
               <ol className="space-y-0">
                 {s.flow.map((f, k) => (
                   <li key={f.en} className="flex items-baseline gap-3 border-b border-rule py-2.5 last:border-b-0">
@@ -227,7 +231,7 @@ export default function Industries() {
 
           <div className="flex flex-wrap gap-3 px-5 py-6 sm:px-8">
             <PrimaryButton onClick={() => openDemo({ segment: id === "showroom" ? "retail" : id, modules: s.modules })}>
-              {t({ ar: "ديمو على نشاطي", en: "Demo for my business" })}
+              {t({ ar: "احجز عرض مجاني على نشاطك", en: "Book a free demo for your business" })}
             </PrimaryButton>
             <WhatsAppButton variant="line" topic={s.tab} />
           </div>

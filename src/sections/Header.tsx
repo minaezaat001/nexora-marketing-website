@@ -5,10 +5,10 @@ import { Logo, PrimaryButton, WhatsAppGlyph } from "../components/ui";
 import { whatsappIntro, whatsappLink } from "../config/site";
 
 export const navLinks = [
-  { id: "tour", label: { ar: "جولة في النظام", en: "Product tour" } },
-  { id: "trace", label: { ar: "دورة المستند", en: "Document trace" } },
+  { id: "tour", label: { ar: "الإدارات", en: "Departments" } },
+  { id: "trace", label: { ar: "إزاي بيشتغل", en: "How it works" } },
   { id: "industries", label: { ar: "القطاعات", en: "Industries" } },
-  { id: "engineering", label: { ar: "البنية الهندسية", en: "Engineering" } },
+  { id: "engineering", label: { ar: "ليه نكسورا", en: "Why NEXORA" } },
 ];
 
 export default function Header() {
@@ -46,7 +46,7 @@ export default function Header() {
             <WhatsAppGlyph className="h-[18px] w-[18px]" />
           </a>
           <PrimaryButton onClick={() => openDemo()} className="hidden !h-9 !px-4 !text-[14px] sm:inline-flex">
-            {t({ ar: "احجز ديمو", en: "Book a demo" })}
+            {t({ ar: "احجز عرض مجاني", en: "Book a free demo" })}
           </PrimaryButton>
           <button type="button" onClick={() => setMenu((m) => !m)} aria-expanded={menu} aria-label="Menu"
             className="grid h-9 w-9 place-items-center rounded border border-rule text-ink lg:hidden">
@@ -62,7 +62,7 @@ export default function Header() {
               {navLinks.map((l) => (
                 <a key={l.id} href={`#${l.id}`} onClick={() => setMenu(false)} className="border-b border-rule px-5 py-3.5 text-ink2">{t(l.label)}</a>
               ))}
-              <div className="p-5"><PrimaryButton onClick={() => { setMenu(false); openDemo(); }} className="w-full">{t({ ar: "احجز ديمو عملي", en: "Book a live demo" })}</PrimaryButton></div>
+              <div className="p-5"><PrimaryButton onClick={() => { setMenu(false); openDemo(); }} className="w-full">{t({ ar: "احجز عرض حي مجاني", en: "Book a free live demo" })}</PrimaryButton></div>
             </div>
           </motion.nav>
         )}

@@ -20,10 +20,9 @@ export default function Tour() {
       {domains.map((x) => (
         <li key={x.id}>
           <button type="button" role="tab" aria-selected={id === x.id} onClick={() => pick(x.id)}
-            className={`relative flex w-full items-baseline justify-between gap-3 border-b border-rule py-3.5 text-start transition-colors ${id === x.id ? "text-ink" : "text-ink2 hover:text-ink"}`}>
+            className={`relative flex w-full items-baseline border-b border-rule py-3.5 text-start transition-colors ${id === x.id ? "text-ink" : "text-ink2 hover:text-ink"}`}>
             {id === x.id && <span className="absolute inset-y-2 -start-5 w-[2px] bg-royal sm:-start-8" />}
             <span className={`text-[15.5px] ${id === x.id ? "font-medium" : ""}`}>{t(x.name)}</span>
-            <span className="num text-[11.5px] text-muted">{x.models.length}</span>
           </button>
         </li>
       ))}
@@ -34,13 +33,14 @@ export default function Tour() {
     <Section
       id="tour"
       index="01"
-      label={{ ar: "جولة في النظام", en: "Product tour" }}
-      title={{ ar: "٦٠ جدول بيانات، متقسمين على ٧ دوائر شغل.", en: "Sixty data models, organised into seven areas of work." }}
-      lead={{ ar: "اختار الدائرة، وغيّر الاختيار في المستند، وشوف القيد اللي بيطلع منه. الرقم جنب كل دائرة هو عدد الجداول اللي وراها.", en: "Pick an area, change the option on the document, and watch the entry it produces. The number beside each area is how many data models sit behind it." }}
+      label={{ ar: "الإدارات", en: "Departments" }}
+      title={{ ar: "نظام واحد يغطي 8 إدارات — بدل برامج منفصلة وشيتات إكسيل متفرقة.", en: "One system for eight departments — instead of separate programs and scattered Excel sheets." }}
+      lead={{ ar: "اختار الإدارة، وجرّب بنفسك: غيّر الاختيار في المستند وشوف الحسابات بتتظبط لوحدها قدامك.", en: "Pick a department and try it yourself: change the option on the document and watch the books update in front of you." }}
       aside={list}
     >
       <AnimatePresence mode="wait">
         <motion.div key={id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.12 }}>
+          <p className="border-b border-rule px-5 py-6 text-[19px] font-medium leading-[1.5] text-ink sm:px-8 sm:text-[21px]">{t(d.pitch)}</p>
           {/* document sheet */}
           <div className="border-b border-rule bg-sheet">
             <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-rule px-5 py-5 sm:px-8">
@@ -92,7 +92,7 @@ export default function Tour() {
           <div className="grid border-b border-rule md:grid-cols-[1.4fr_1fr]">
             <div className="border-b border-rule md:border-b-0 md:border-e">
               <div className="flex items-baseline justify-between px-5 pb-2 pt-5 sm:px-8">
-                <span className="text-[14px] font-medium text-ink">{t({ ar: "الأثر المحاسبي", en: "Accounting impact" })}</span>
+                <span className="text-[14px] font-medium text-ink">{t({ ar: "اللي حصل في حساباتك", en: "What happened in your books" })}</span>
                 {o.impact.length > 0 && <span className={`text-[12.5px] ${dr === cr ? "text-emerald" : "text-bad"}`}>{dr === cr ? t({ ar: "متوازن", en: "Balanced" }) : t({ ar: "غير متوازن", en: "Unbalanced" })}</span>}
               </div>
               {o.impact.length > 0 ? (
@@ -128,8 +128,8 @@ export default function Tour() {
           </div>
 
           <div className="flex flex-wrap items-center gap-x-6 gap-y-4 px-5 py-5 sm:px-8">
-            <p className="num flex-1 text-[11.5px] leading-relaxed text-muted" dir="ltr" style={{ textAlign: "start" }}>{d.models.join("  ")}</p>
-            <WhatsAppButton variant="line" topic={d.name} label={{ ar: "اسأل عن الدائرة دي", en: "Ask about this area" }} />
+            <p className="flex-1 text-[14px] text-ink2">{t({ ar: "عايز تشوف الإدارة دي على أرقام شركتك؟", en: "Want to see this department with your own numbers?" })}</p>
+            <WhatsAppButton variant="line" topic={d.name} label={{ ar: "اسألنا عنها على واتساب", en: "Ask us on WhatsApp" }} />
           </div>
         </motion.div>
       </AnimatePresence>

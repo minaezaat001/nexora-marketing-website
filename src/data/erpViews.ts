@@ -68,12 +68,12 @@ export const views: View[] = [
     totalLabel: { ar: "قيمة المخزون", en: "Stock value" },
     rows: [
       { key: "", branch: "cai", total: 42000, cells: ["ITM-001", { ar: "طقم غرفة نوم خشب زان", en: "Beech bedroom set" }, "14", "5", "3,000.00", "42,000.00"] },
-      { key: "low", branch: "cai", total: 14700, cells: ["ITM-003", { ar: "طقم صالون كلاسيك ٧ مقاعد", en: "Classic 7-seat salon set" }, s({ ar: "3", en: "3" }, "bad"), "4", "4,900.00", "14,700.00"] },
+      { key: "low", branch: "cai", total: 14700, cells: ["ITM-003", { ar: "طقم صالون كلاسيك 7 مقاعد", en: "Classic 7-seat salon set" }, s({ ar: "3", en: "3" }, "bad"), "4", "4,900.00", "14,700.00"] },
       { key: "", branch: "alx", total: 19800, cells: ["ITM-004", { ar: "كنبة زاوية قماش", en: "Fabric corner sofa" }, "9", "4", "2,200.00", "19,800.00"] },
       { key: "", branch: "cai", total: 25760, cells: ["ITM-007", { ar: "كرسي مكتب جلد طبي", en: "Ergonomic office chair" }, "46", "20", "560.00", "25,760.00"] },
       { key: "low", branch: "cai", total: 3120, cells: ["ITM-009", { ar: "ثريا كريستال معلقة", en: "Crystal chandelier" }, s({ ar: "4", en: "4" }, "bad"), "8", "780.00", "3,120.00"] },
-      { key: "low", branch: "alx", total: 3120, cells: ["ITM-010", { ar: "ستارة بلاك أوت ٣م", en: "Blackout curtain 3m" }, s({ ar: "12", en: "12" }, "bad"), "25", "260.00", "3,120.00"] },
-      { key: "", branch: "alx", total: 20580, cells: ["ITM-013", { ar: "مرتبة طبية ١٨٠×٢٠٠", en: "Orthopedic mattress 180×200" }, "21", "10", "980.00", "20,580.00"] },
+      { key: "low", branch: "alx", total: 3120, cells: ["ITM-010", { ar: "ستارة بلاك أوت 3م", en: "Blackout curtain 3m" }, s({ ar: "12", en: "12" }, "bad"), "25", "260.00", "3,120.00"] },
+      { key: "", branch: "alx", total: 20580, cells: ["ITM-013", { ar: "مرتبة طبية 180×200", en: "Orthopedic mattress 180×200" }, "21", "10", "980.00", "20,580.00"] },
     ],
   },
   {

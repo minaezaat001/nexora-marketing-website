@@ -18,8 +18,8 @@ export function whatsappLink(text: string): string {
 export function whatsappIntro(lang: Lang, topic?: string): string {
   if (lang === "ar") {
     return topic
-      ? `أهلاً فريق نكسورا 👋\nمهتم أعرف أكتر عن: ${topic}.\nممكن نحدد ميعاد ديمو؟`
-      : "أهلاً فريق نكسورا 👋\nعايز أعرف أكتر عن نظام NEXORA ERP وأحجز ديمو عملي.";
+      ? `أهلاً فريق نكسورا 👋\nمهتم أعرف أكتر عن: ${topic}.\nممكن نحدد ميعاد عرض حي؟`
+      : "أهلاً فريق نكسورا 👋\nعايز أعرف أكتر عن نظام NEXORA ERP وأحجز عرض حي مجاني.";
   }
   return topic
     ? `Hi NEXORA team 👋\nI'd like to learn more about: ${topic}.\nCan we schedule a demo?`

@@ -55,7 +55,7 @@ export function WhatsAppButton({ topic, label, className = "", variant = "solid"
     <a href={href} target="_blank" rel="noopener noreferrer"
       className={`inline-flex h-11 items-center justify-center gap-2 rounded px-5 text-[15px] font-medium transition-colors active:translate-y-px ${look} ${className}`}>
       <WhatsAppGlyph className="h-[18px] w-[18px]" />
-      {t(label ?? { ar: "كلّمنا على واتساب", en: "Message us on WhatsApp" })}
+      {t(label ?? { ar: "تحدث معنا عبر واتساب الآن", en: "Chat with us on WhatsApp now" })}
     </a>
   );
 }
