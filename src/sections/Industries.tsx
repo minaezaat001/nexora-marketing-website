@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useApp, type L } from "../i18n";
-import { Check, Pill, PrimaryButton, SectionHead, WhatsAppButton } from "../components/ui";
+import { PrimaryButton, Section, WhatsAppButton } from "../components/ui";
 import type { DemoPreset } from "../i18n";
 
 type Seg = DemoPreset["segment"] | "showroom";
@@ -12,7 +12,7 @@ type Segment = {
   headline: L;
   pains: L[];
   flow: L[];
-  watch: { k: L; v: string; tone: "ok" | "warn" | "info" }[];
+  watch: { k: L; v: L | string; tone: "ok" | "warn" | "info" }[];
   screen: { title: L; cols: L[]; rows: (string | L)[][] };
   roadmap?: L;
   modules: string[];
@@ -30,9 +30,9 @@ const segments: Segment[] = [
     ],
     flow: [{ ar: "طلب شراء خامة", en: "Material requisition" }, { ar: "أمر شراء معتمد", en: "Approved PO" }, { ar: "استلام بمخزن الخامات", en: "Receive to raw-materials store" }, { ar: "تحويل لخط الإنتاج", en: "Transfer to the line" }, { ar: "تسوية تالف / عجز", en: "Damage / shortage adjustment" }],
     watch: [
-      { k: { ar: "متوسط تكلفة الخامة", en: "Avg. material cost" }, v: "per item × warehouse", tone: "info" },
-      { k: { ar: "التالف والعجز", en: "Damage & shortage" }, v: "auto-posted", tone: "ok" },
-      { k: { ar: "أصول وماكينات", en: "Plant & machinery" }, v: "monthly depreciation", tone: "info" },
+      { k: { ar: "متوسط تكلفة الخامة", en: "Avg. material cost" }, v: { ar: "لكل صنف × مخزن", en: "per item × warehouse" }, tone: "info" },
+      { k: { ar: "التالف والعجز", en: "Damage & shortage" }, v: { ar: "بقيد تلقائي", en: "posted automatically" }, tone: "ok" },
+      { k: { ar: "أصول وماكينات", en: "Plant & machinery" }, v: { ar: "إهلاك شهري", en: "monthly depreciation" }, tone: "info" },
     ],
     screen: {
       title: { ar: "تسويات المخزون — مخزن الخامات", en: "Stock adjustments — raw materials" },
@@ -44,7 +44,7 @@ const segments: Segment[] = [
       ],
     },
     roadmap: { ar: "أوامر الإنتاج وقوائم المواد (BOM) على خارطة التطوير — كلّمنا عن خط إنتاجك.", en: "Production orders and bills of materials (BOM) are on the roadmap — tell us about your line." },
-    modules: ["inventory", "purchasing", "accounting"],
+    modules: ["inventory", "purchasing", "ledger"],
   },
   {
     id: "company",
@@ -57,9 +57,9 @@ const segments: Segment[] = [
     ],
     flow: [{ ar: "مستند في الفرع", en: "Branch document" }, { ar: "قيد تلقائي بمركز تكلفة", en: "Auto entry with cost center" }, { ar: "أرصدة موحدة", en: "Consolidated balances" }, { ar: "قفل الفترة", en: "Lock the period" }, { ar: "إقفال سنوي", en: "Year-end close" }],
     watch: [
-      { k: { ar: "نطاق البيانات", en: "Data scope" }, v: "BRANCH · COMPANY", tone: "info" },
-      { k: { ar: "الفترات المقفلة", en: "Locked periods" }, v: "posting blocked", tone: "ok" },
-      { k: { ar: "سجل المراجعة", en: "Audit log" }, v: "every write", tone: "ok" },
+      { k: { ar: "نطاق البيانات", en: "Data scope" }, v: { ar: "فرع أو شركة", en: "branch or company" }, tone: "info" },
+      { k: { ar: "الفترات المقفلة", en: "Locked periods" }, v: { ar: "الترحيل ممنوع", en: "posting blocked" }, tone: "ok" },
+      { k: { ar: "سجل المراجعة", en: "Audit log" }, v: { ar: "على كل عملية", en: "on every write" }, tone: "ok" },
     ],
     screen: {
       title: { ar: "الأرصدة الموحدة حسب الفرع", en: "Consolidated balances by branch" },
@@ -70,7 +70,7 @@ const segments: Segment[] = [
         [{ ar: "4100 المبيعات", en: "4100 Sales" }, "412,600", "235,330", "647,930"],
       ],
     },
-    modules: ["accounting", "control", "hr"],
+    modules: ["ledger", "control", "hr"],
   },
   {
     id: "retail",
@@ -83,9 +83,9 @@ const segments: Segment[] = [
     ],
     flow: [{ ar: "ملصق باركود", en: "Barcode label" }, { ar: "فاتورة نقدي / آجل", en: "Cash / credit invoice" }, { ar: "خصم المخزن بالتكلفة", en: "Stock relieved at cost" }, { ar: "سند قبض", en: "Receipt voucher" }, { ar: "لوحة الخزينة", en: "Treasury dashboard" }],
     watch: [
-      { k: { ar: "حد ائتمان العميل", en: "Customer credit limit" }, v: "checked on invoice", tone: "warn" },
+      { k: { ar: "حد ائتمان العميل", en: "Customer credit limit" }, v: { ar: "بيتفحص وقت الفاتورة", en: "checked at invoicing" }, tone: "warn" },
       { k: { ar: "عميل نقدي", en: "Walk-in customer" }, v: "CUST-CASH", tone: "info" },
-      { k: { ar: "تنبيهات الحد الأدنى", en: "Reorder alerts" }, v: "alerts centre", tone: "ok" },
+      { k: { ar: "تنبيهات الحد الأدنى", en: "Reorder alerts" }, v: { ar: "مركز التنبيهات", en: "alerts centre" }, tone: "ok" },
     ],
     screen: {
       title: { ar: "آخر الفواتير — فرع المعرض", en: "Latest invoices — showroom" },
@@ -110,9 +110,9 @@ const segments: Segment[] = [
     ],
     flow: [{ ar: "عرض سعر", en: "Quotation" }, { ar: "فاتورة آجل", en: "Credit invoice" }, { ar: "جدول أقساط", en: "Installment schedule" }, { ar: "تحصيل وتخصيص", en: "Collect & allocate" }, { ar: "متابعة العميل", en: "Customer follow-up" }],
     watch: [
-      { k: { ar: "أقساط متأخرة", en: "Overdue installments" }, v: "alerts centre", tone: "warn" },
+      { k: { ar: "أقساط متأخرة", en: "Overdue installments" }, v: { ar: "مركز التنبيهات", en: "alerts centre" }, tone: "warn" },
       { k: { ar: "مركز تكلفة التوصيل", en: "Delivery cost center" }, v: "CC-002", tone: "info" },
-      { k: { ar: "الشكاوى", en: "Complaints" }, v: "tracked to close", tone: "ok" },
+      { k: { ar: "الشكاوى", en: "Complaints" }, v: { ar: "متابعة لحد الإغلاق", en: "tracked to closure" }, tone: "ok" },
     ],
     screen: {
       title: { ar: "جدول أقساط — SI-0418", en: "Installment schedule — SI-0418" },
@@ -123,7 +123,7 @@ const segments: Segment[] = [
         ["3/4", "2026-11-30", { ar: "قادم", en: "Upcoming" }, "4,560"],
       ],
     },
-    modules: ["sales", "treasury", "crm"],
+    modules: ["sales", "treasury"],
   },
 ];
 
@@ -131,103 +131,108 @@ export default function Industries() {
   const { t, openDemo, setTopic } = useApp();
   const [id, setId] = useState<Seg>("factory");
   const s = segments.find((x) => x.id === id)!;
-
   const pick = (x: Segment) => { setId(x.id); setTopic(x.tab); };
 
+  const list = (
+    <ul className="border-t border-rule" role="tablist" aria-orientation="vertical">
+      {segments.map((x) => (
+        <li key={x.id}>
+          <button type="button" role="tab" aria-selected={id === x.id} onClick={() => pick(x)}
+            className={`relative w-full border-b border-rule py-3.5 text-start text-[15.5px] transition-colors ${id === x.id ? "font-medium text-ink" : "text-ink2 hover:text-ink"}`}>
+            {id === x.id && <span className="absolute inset-y-2 -start-5 w-[2px] bg-royal sm:-start-8" />}
+            {t(x.tab)}
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+
   return (
-    <section id="industries" className="scroll-mt-20 border-t border-line bg-side/40 py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <SectionHead
-          eyebrow={{ ar: "الحلول حسب النشاط", en: "Solutions by industry" }}
-          title={{ ar: "نفس النظام — بيتكلم لغة نشاطك.", en: "One system that speaks your industry's language." }}
-          lead={{ ar: "اختار نشاطك وشوف المشكلة اللي بنحلها، مسار العمل، والشاشة اللي هتفتحها كل يوم.", en: "Pick your business to see the problem we solve, the workflow, and the screen you'll open every day." }}
-        />
+    <Section
+      id="industries"
+      index="03"
+      label={{ ar: "القطاعات", en: "Industries" }}
+      title={{ ar: "نفس النظام، بلغة نشاطك.", en: "One system, in the language of your trade." }}
+      lead={{ ar: "اختار نشاطك: المشكلة اللي بنقفلها، مسار الشغل جوه النظام، والشاشة اللي هتفتحها كل يوم.", en: "Pick your trade: the problem we close, the workflow inside the system, and the screen you'll open every day." }}
+      aside={list}
+    >
+      <AnimatePresence mode="wait">
+        <motion.div key={id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.12 }}>
+          <div className="border-b border-rule px-5 py-8 sm:px-8 sm:py-10">
+            <h3 className="max-w-[28ch] text-balance text-[24px] font-semibold leading-[1.3] text-ink sm:text-[28px]">{t(s.headline)}</h3>
+          </div>
 
-        <div className="no-scrollbar mt-10 flex gap-1 overflow-x-auto rounded-md border border-line bg-surface p-1" role="tablist">
-          {segments.map((x) => (
-            <button key={x.id} role="tab" aria-selected={id === x.id} type="button" onClick={() => pick(x)}
-              className={`relative flex-1 shrink-0 whitespace-nowrap rounded-sm px-4 py-2.5 text-[14px] transition ${id === x.id ? "text-ink" : "text-muted hover:text-ink2"}`}>
-              {id === x.id && <motion.span layoutId="seg-pill" className="absolute inset-0 rounded-sm bg-surface2 ring-1 ring-lineStrong" transition={{ type: "spring", stiffness: 380, damping: 32 }} />}
-              <span className="relative">{t(x.tab)}</span>
-            </button>
-          ))}
-        </div>
-
-        <AnimatePresence mode="wait">
-          <motion.div key={id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }}
-            className="mt-6 grid gap-6 lg:grid-cols-[1fr_1.1fr]">
-            <div>
-              <h3 className="text-balance text-[26px] font-bold leading-snug text-ink">{t(s.headline)}</h3>
-              <ul className="mt-6 space-y-3">
+          <div className="grid border-b border-rule md:grid-cols-2">
+            <div className="border-b border-rule px-5 py-7 sm:px-8 md:border-b-0 md:border-e">
+              <p className="mb-4 text-[13px] text-muted">{t({ ar: "اللي بيحصل النهارده", en: "What happens today" })}</p>
+              <ul className="space-y-3.5">
                 {s.pains.map((p) => (
-                  <li key={p.en} className="flex gap-3 text-[15px] text-ink2">
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-bad" />
-                    {t(p)}
-                  </li>
+                  <li key={p.en} className="border-s-2 border-bad/50 ps-3 text-[15px] text-ink2">{t(p)}</li>
                 ))}
               </ul>
-              <div className="mt-6 grid grid-cols-3 gap-2">
-                {s.watch.map((w) => (
-                  <div key={w.k.en} className="rounded-sm border border-line bg-surface p-3">
-                    <div className="text-[12px] text-muted">{t(w.k)}</div>
-                    <div className="mt-1.5"><Pill tone={w.tone}><span className="num">{w.v}</span></Pill></div>
-                  </div>
+            </div>
+            <div className="px-5 py-7 sm:px-8">
+              <p className="mb-4 text-[13px] text-muted">{t({ ar: "مسار الشغل في نكسورا", en: "The workflow in NEXORA" })}</p>
+              <ol className="space-y-0">
+                {s.flow.map((f, k) => (
+                  <li key={f.en} className="flex items-baseline gap-3 border-b border-rule py-2.5 last:border-b-0">
+                    <span className="num w-5 shrink-0 text-[12px] text-royal">{k + 1}</span>
+                    <span className="text-[15px] text-ink">{t(f)}</span>
+                  </li>
                 ))}
-              </div>
-              {s.roadmap && (
-                <p className="mt-4 rounded-sm border border-dashed border-lineStrong px-3 py-2 text-[13px] text-muted">
-                  <span className="me-1.5 font-semibold text-warn">{t({ ar: "بصراحة:", en: "Honestly:" })}</span>{t(s.roadmap)}
-                </p>
-              )}
-              <div className="mt-7 flex flex-wrap gap-3">
-                <PrimaryButton onClick={() => openDemo({ segment: id === "showroom" ? "retail" : id, modules: s.modules })}>
-                  {t({ ar: "ديمو على نشاطي", en: "Demo for my business" })}
-                </PrimaryButton>
-                <WhatsAppButton topic={s.tab} />
-              </div>
+              </ol>
             </div>
+          </div>
 
-            <div className="space-y-3">
-              <div className="rounded-md border border-line bg-surface p-5">
-                <p className="mb-4 text-[12px] font-semibold uppercase tracking-[0.12em] text-accent">{t({ ar: "مسار العمل في نكسورا", en: "The NEXORA workflow" })}</p>
-                <ol className="relative space-y-0">
-                  {s.flow.map((f, k) => (
-                    <motion.li key={f.en} initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: k * 0.06 }}
-                      className="relative flex items-center gap-3 pb-3 last:pb-0">
-                      {k < s.flow.length - 1 && <span className="absolute start-[13px] top-7 h-[calc(100%-16px)] w-px bg-lineStrong" />}
-                      <span className="num relative grid h-7 w-7 shrink-0 place-items-center rounded-full border border-lineStrong bg-surface2 text-[11.5px] text-ink">{k + 1}</span>
-                      <span className="text-[14px] text-ink">{t(f)}</span>
-                      {k === s.flow.length - 1 && <Check className="ms-auto text-ok" />}
-                    </motion.li>
-                  ))}
-                </ol>
-              </div>
-              <div className="overflow-hidden rounded-md border border-line bg-surface">
-                <div className="flex items-center justify-between border-b border-line px-4 py-2.5">
-                  <span className="text-[13px] font-semibold text-ink">{t(s.screen.title)}</span>
-                  <span className="flex gap-1" dir="ltr"><i className="h-2 w-2 rounded-full bg-line" /><i className="h-2 w-2 rounded-full bg-line" /><i className="h-2 w-2 rounded-full bg-line" /></span>
-                </div>
-                <table className="w-full text-[12.5px]">
-                  <thead className="bg-surface2/60 text-[11px] text-muted">
-                    <tr>{s.screen.cols.map((c, k) => <th key={c.en} className={`px-4 py-2 font-medium ${k === s.screen.cols.length - 1 ? "text-end" : "text-start"}`}>{t(c)}</th>)}</tr>
-                  </thead>
-                  <tbody>
-                    {s.screen.rows.map((r, ri) => (
-                      <tr key={ri} className="border-t border-line">
-                        {r.map((c, k) => (
-                          <td key={k} className={`px-4 py-2.5 ${k === r.length - 1 ? "num text-end text-ink" : "text-ink2"} ${typeof c === "string" && k < r.length - 1 ? "num" : ""}`}>
-                            {typeof c === "string" ? c : t(c)}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+          <div className="border-b border-rule">
+            <div className="flex items-baseline justify-between border-b border-rule bg-paper px-5 py-3 sm:px-8">
+              <span className="text-[14px] font-medium text-ink">{t(s.screen.title)}</span>
             </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-    </section>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[460px] border-collapse text-[14px]">
+                <thead>
+                  <tr className="text-[12.5px] text-muted">
+                    {s.screen.cols.map((c, k) => <th key={c.en} className={`px-5 py-2.5 font-normal sm:px-8 ${k === s.screen.cols.length - 1 ? "text-end" : "text-start"}`}>{t(c)}</th>)}
+                  </tr>
+                </thead>
+                <tbody>
+                  {s.screen.rows.map((r, ri) => (
+                    <tr key={ri} className="border-t border-rule">
+                      {r.map((c, k) => (
+                        <td key={k} className={`px-5 py-3 sm:px-8 ${k === r.length - 1 ? "text-end text-ink" : "text-ink2"}`}>
+                          {typeof c === "string" ? <span className="num">{c}</span> : t(c)}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <dl className="grid grid-cols-1 border-b border-rule sm:grid-cols-3">
+            {s.watch.map((w) => (
+              <div key={w.k.en} className="border-b border-rule px-5 py-4 last:border-b-0 sm:border-b-0 sm:border-e sm:px-8 sm:last:border-e-0">
+                <dt className="text-[12.5px] text-muted">{t(w.k)}</dt>
+                <dd className="mt-1 text-[14px] text-ink">{typeof w.v === "string" ? <span className="num">{w.v}</span> : t(w.v)}</dd>
+              </div>
+            ))}
+          </dl>
+
+          {s.roadmap && (
+            <p className="border-b border-rule px-5 py-4 text-[14px] text-ink2 sm:px-8">
+              <span className="me-1.5 font-medium text-warn">{t({ ar: "بصراحة:", en: "To be clear:" })}</span>{t(s.roadmap)}
+            </p>
+          )}
+
+          <div className="flex flex-wrap gap-3 px-5 py-6 sm:px-8">
+            <PrimaryButton onClick={() => openDemo({ segment: id === "showroom" ? "retail" : id, modules: s.modules })}>
+              {t({ ar: "ديمو على نشاطي", en: "Demo for my business" })}
+            </PrimaryButton>
+            <WhatsAppButton variant="line" topic={s.tab} />
+          </div>
+        </motion.div>
+      </AnimatePresence>
+    </Section>
   );
 }

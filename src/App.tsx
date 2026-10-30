@@ -2,10 +2,10 @@ import { MotionConfig } from "framer-motion";
 import { AppProvider } from "./i18n";
 import Header from "./sections/Header";
 import Hero from "./sections/Hero";
-import Modules from "./sections/Modules";
+import Tour from "./sections/Tour";
+import Trace from "./sections/Trace";
 import Industries from "./sections/Industries";
 import Why from "./sections/Why";
-import Roi from "./sections/Roi";
 import DemoHub, { DemoModal } from "./sections/DemoHub";
 import Footer, { FinalCta, WhatsAppFab } from "./sections/Footer";
 
@@ -16,10 +16,10 @@ export default function App() {
         <Header />
         <main>
           <Hero />
-          <Modules />
+          <Tour />
+          <Trace />
           <Industries />
           <Why />
-          <Roi />
           <DemoHub />
           <FinalCta />
         </main>

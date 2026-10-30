@@ -4,3 +4,7 @@ dist/
 .vercel/
 .env*
 ERP_AUDIT_SUMMARY.md
+# local agent tooling
+.agents/
+.claude/
+skills-lock.json

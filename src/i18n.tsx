@@ -33,7 +33,7 @@ function write(key: string, value: string) {
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(() => (read("nx-lang") === "en" ? "en" : "ar"));
-  const [theme, setTheme] = useState<Theme>(() => (read("nx-theme") === "light" ? "light" : "dark"));
+  const [theme, setTheme] = useState<Theme>(() => (read("nx-theme-v2") === "dark" ? "dark" : "light"));
   const [topic, setTopic] = useState<L | null>(null);
   const [demoOpen, setDemoOpen] = useState(false);
   const [demoPreset, setDemoPreset] = useState<Partial<DemoPreset>>({});
@@ -49,14 +49,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    write("nx-theme", theme);
+    write("nx-theme-v2", theme);
   }, [theme]);
 
   const t = useCallback((s: L) => s[lang], [lang]);
   const value = useMemo<Ctx>(() => ({
     lang, dir, theme, t, topic, setTopic,
     setLang: setLangState,
-    toggleTheme: () => setTheme((x) => (x === "dark" ? "light" : "dark")),
+    toggleTheme: () => setTheme((x) => (x === "light" ? "dark" : "light")),
     demoOpen, demoPreset,
     openDemo: (preset = {}) => { setDemoPreset(preset); setDemoOpen(true); },
     closeDemo: () => setDemoOpen(false),
